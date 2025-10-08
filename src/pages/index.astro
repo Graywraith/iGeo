@@ -9,13 +9,21 @@ An Astro website can go way beyond static pages - on the right platform.
 Netlify supports not only [Streaming SSR](https://docs.astro.build/en/guides/server-side-rendering/#html-streaming) and fast [Edge Middleware](https://docs.astro.build/en/guides/middleware/), but also [on-demand revalidation](https://www.netlify.com/blog/cache-tags-and-purge-api-on-netlify/) and [stale-while-revalidate](https://www.netlify.com/blog/swr-and-fine-grained-cache-control/). 
 Any page or data can be rebuilt only when needed, without site visitors ever getting a performance hit.
 `;
+
+const aboutFossilGeo = `
+FossilGeo is a cross-platform application designed to provide users with geographic and geological information, primarily focused on the United Kingdom although it also includes data from many other regions. The app offers data on various geological features, fossil locations, and other related information to assist users of all ages in their exploration of the world beneath their feet.
+
+Currently, FossilGeo is available as a web application and an Android app, with plans to expand to iOS in the future. The app is built using modern web technologies, including Astro for the web version, ensuring a fast and responsive user experience. So far very much a work in progress, but the goal is to create a comprehensive resource for anyone interested in geology and fossils.
+`;
 ---
 
 <Layout title="Welcome to Astro.">
     <ContextAlert class="mb-8" />
-    <h1 class="mb-10">Netlify Platform Starter for Astro</h1>
-    <Markdown content={explainer} class="mb-10 text-lg" />
+    <h1 class="mb-10">Fossil Geo</h1>
+    <!-- <Markdown content={explainer} class="mb-10 text-lg" /> -->
+    <Markdown content={aboutFossilGeo} class="mb-10 text-lg" />
     <p>
-        <a href="https://docs.netlify.com/frameworks/astro/" class="btn btn-lg sm:min-w-64">Read the Docs</a>
+        <!-- <a href="https://docs.netlify.com/frameworks/astro/" class="btn btn-lg sm:min-w-64">Read the Docs</a> -->
+        <a href="/disclaimer" class="btn btn-lg btn-secondary sm:min-w-64 ml-4">Disclaimer</a>
     </p>
 </Layout>

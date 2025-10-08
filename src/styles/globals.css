@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Asimovian&display=swap');
 @import 'tailwindcss';
 
 @theme {
@@ -5,6 +6,17 @@
     --color-primary: #f67280;
     --color-primary-content: #101828;
     --color-complementary: #355c7d;
+    --color-surface-light: #f5f7fa; /* header/menu surface light */
+    --color-card-light: #ffffff; /* link/button surface light */
+    --color-text-light: #1f2937; /* slate-800 */
+    --color-border-light: #d0d7de; /* neutral-300 */
+
+    --color-surface-dark: #111827; /* gray-900 */
+    --color-card-dark: #1f2937; /* gray-800 */
+    --color-text-dark: #f8fafc; /* slate-50 */
+    --color-border-dark: #334155; /* slate-700 */
+
+    --fg-focus-ring: #60a5fa; /* blue-400 */
     --background-image-noise: linear-gradient(
             to bottom,
             color-mix(in oklab, var(--color-gray-950) 0%, transparent),
@@ -75,4 +87,22 @@
         --btn-px: 1.5rem;
         --btn-py: 1.125rem;
     }
+}
+
+body {
+    @apply bg-gray-950 text-gray-300 font-sans antialiased;
+    font-family: Asimovian;
+    background-image: var(--background-image-noise);
+    background-size: 100% 100%, auto;
+    background-attachment: fixed;
+    background-blend-mode: overlay;
+    line-height: 1.625;
+    min-height: 100vh;
+    scroll-behavior: smooth;
+}
+
+p {
+    @apply max-w-prose;
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
 }
