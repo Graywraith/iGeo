@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 213 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;">
+    <g transform="matrix(1,0,0,1,-75.7407,-35.8769)">
+        <g>
+            <clipPath id="_clip1">
+                <path d="M95,20C130,10 190,30 215,25C245,20 280,40 290,70C295,95 280,130 225,135C180,140 120,130 95,125C70,120 55,100 60,70C65,40 80,30 95,20Z"/>
+            </clipPath>
+            <g clip-path="url(#_clip1)">
+                <g transform="matrix(1,0,0,1,-14.8693,-4.77124)">
+                    <path d="M100,110C130,90 170,130 210,110" style="fill:rgb(0,24,255);fill-opacity:0;fill-rule:nonzero;stroke:rgb(0,23,255);stroke-width:4px;"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-16.0131,-10.6536)">
+                    <path d="M100,110C130,90 170,130 210,110" style="fill:rgb(173,206,27);fill-opacity:0;fill-rule:nonzero;stroke:rgb(173,206,27);stroke-width:4px;"/>
+                </g>
+                <g transform="matrix(1,0,0,1,-14.7059,-9.0196)">
+                    <path d="M100,120C130,100 170,140 210,120" style="fill:none;fill-rule:nonzero;stroke:rgb(216,128,41);stroke-width:4px;"/>
+                </g>
+                <g transform="matrix(1,0,0,1,9.64051,-13.1046)">
+                    <path d="M100,130C130,110 170,150 210,130" style="fill:none;fill-rule:nonzero;stroke:rgb(224,164,20);stroke-width:4px;"/>
+                </g>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,205,60)">
+            <g transform="matrix(1,0,0,1,40,20)">
+                <path d="M0,-40C21.753,-39.728 39.5,-21.758 39.5,-0.003C39.5,21.94 21.443,39.997 -0.5,39.997C-22.443,39.997 -40.5,21.94 -40.5,-0.003C-40.5,-21.758 -22.753,-39.728 -1,-40" style="fill:none;fill-rule:nonzero;stroke:rgb(140,97,69);stroke-width:2px;"/>
+            </g>
+            <g transform="matrix(1,0,0,1,40,20)">
+                <path d="M0,-30C16.266,-29.729 29.5,-16.273 29.5,-0.004C29.5,16.453 15.958,29.996 -0.5,29.996C-16.958,29.996 -30.5,16.453 -30.5,-0.004C-30.5,-16.273 -17.266,-29.729 -1,-30" style="fill:none;fill-rule:nonzero;stroke:rgb(140,97,69);stroke-width:2px;"/>
+            </g>
+            <g transform="matrix(1,0,0,1,40,20)">
+                <path d="M0,-20C10.78,-19.73 19.5,-10.789 19.5,-0.006C19.5,10.965 10.472,19.994 -0.5,19.994C-11.472,19.994 -20.5,10.965 -20.5,-0.006C-20.5,-10.789 -11.78,-19.73 -1,-20" style="fill:none;fill-rule:nonzero;stroke:rgb(140,97,69);stroke-width:2px;"/>
+            </g>
+            <g transform="matrix(1,0,0,1,40,20)">
+                <path d="M0,-10C5.291,-9.735 9.5,-5.31 9.5,-0.013C9.5,5.473 4.986,9.987 -0.5,9.987C-5.986,9.987 -10.5,5.473 -10.5,-0.013C-10.5,-5.31 -6.291,-9.735 -1,-10" style="fill:none;fill-rule:nonzero;stroke:rgb(140,97,69);stroke-width:2px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,90,90)">
+            <text x="0px" y="0px" style="font-family:'Asimovian-Regular', 'Asimovian';font-size:32px;fill:rgb(173,206,27);">Fossil Geo</text>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,37 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title>Fossil Geo Logo – Fold + Noise</title>
+  <desc>Logo with tectonic folds, fossil motifs, earthy gradient, and subtle noise texture</desc>
+
+  <!-- Noise Filter Definition -->
+  <defs>
+    <filter id="noiseFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" result="monoNoise"/>
+      <feBlend in="SourceGraphic" in2="monoNoise" mode="multiply" />
+    </filter>
+
+    <linearGradient id="foldGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c2b280"/>
+      <stop offset="50%" stop-color="#7a5c3d"/>
+      <stop offset="100%" stop-color="#2e2e2e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Folds with Noise -->
+  <g filter="url(#noiseFilter)" fill="url(#foldGradient)">
+    <path d="M0,100 Q75,50 150,100 Q225,150 300,100 V300 H0 Z"/>
+    <path d="M0,150 Q75,100 150,150 Q225,200 300,150 V300 H0 Z" opacity="0.6"/>
+    <path d="M0,200 Q75,150 150,200 Q225,250 300,200 V300 H0 Z" opacity="0.4"/>
+  </g>
+
+  <!-- Fossils -->
+  <g fill="#f0e6d2" opacity="0.8">
+    <path d="M90,160 Q95,155 100,160 Q105,165 100,170 Q95,175 90,170 Q85,165 90,160 Z"/>
+    <path d="M210,220 C215,210 225,210 230,220 C235,230 225,240 215,235 C205,230 205,225 210,220 Z"/>
+  </g>
+
+  <!-- Text -->
+  <text x="150" y="280" font-family="Georgia, serif" font-size="22" fill="#f0e6d2" text-anchor="middle">
+    Fossil Geo
+  </text>
+</svg>
