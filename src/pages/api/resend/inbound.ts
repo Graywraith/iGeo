@@ -19,12 +19,23 @@ function safeKeyPart(value: string): string {
     return value.replace(/[^a-zA-Z0-9._-]+/g, '-');
 }
 
-async function getReceivedEmailFromResend(emailId: string) {
-    const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) {
-        throw new Error('Missing RESEND_API_KEY');
-    }
+function jsonResponse(body: unknown, init?: ResponseInit) {
+    return new Response(JSON.stringify(body), {
+        ...init,
+        headers: {
+            'content-type': 'application/json',
+            ...(init?.headers ?? {})
+        }
+    });
+}
 
+function getRequiredEnv(name: string): string {
+    const value = process.env[name];
+    if (!value) throw new Error(`Missing ${name}`);
+    return value;
+}
+
+async function getReceivedEmailFromResend(emailId: string, apiKey: string) {
     const response = await fetch(`https://api.resend.com/emails/receiving/${encodeURIComponent(emailId)}`, {
         headers: {
             Authorization: `Bearer ${apiKey}`
@@ -33,7 +44,8 @@ async function getReceivedEmailFromResend(emailId: string) {
 
     if (!response.ok) {
         const text = await response.text().catch(() => '');
-        throw new Error(`Failed to retrieve received email (${response.status}): ${text}`);
+        const message = text ? text.slice(0, 2000) : '(no response body)';
+        throw new Error(`Resend Receiving API error (${response.status}): ${message}`);
     }
 
     return response.json();
@@ -47,64 +59,61 @@ function classifyToAddress(to: string[] | undefined) {
 }
 
 export const POST: APIRoute = async ({ request }) => {
-    const payload = await request.text();
-
-    const svixId = request.headers.get('svix-id') ?? '';
-    const svixTimestamp = request.headers.get('svix-timestamp') ?? '';
-    const svixSignature = request.headers.get('svix-signature') ?? '';
-
-    const webhookSecret = process.env.RESEND_WEBHOOK_SECRET;
-    if (!webhookSecret) {
-        return new Response('Server misconfigured: missing RESEND_WEBHOOK_SECRET', { status: 500 });
-    }
-
-    if (!svixId || !svixTimestamp || !svixSignature) {
-        return new Response('Missing svix headers', { status: 400 });
-    }
-
-    let event: ResendEmailReceivedEvent;
     try {
-        const wh = new Webhook(webhookSecret);
-        const verified = wh.verify(payload, {
-            'svix-id': svixId,
-            'svix-timestamp': svixTimestamp,
-            'svix-signature': svixSignature
+        const payload = await request.text();
+
+        const svixId = request.headers.get('svix-id') ?? '';
+        const svixTimestamp = request.headers.get('svix-timestamp') ?? '';
+        const svixSignature = request.headers.get('svix-signature') ?? '';
+
+        const webhookSecret = getRequiredEnv('RESEND_WEBHOOK_SECRET');
+
+        if (!svixId || !svixTimestamp || !svixSignature) {
+            return jsonResponse({ error: 'Missing svix headers' }, { status: 400 });
+        }
+
+        let event: ResendEmailReceivedEvent;
+        try {
+            const wh = new Webhook(webhookSecret);
+            const verified = wh.verify(payload, {
+                'svix-id': svixId,
+                'svix-timestamp': svixTimestamp,
+                'svix-signature': svixSignature
+            });
+            event = verified as ResendEmailReceivedEvent;
+        } catch {
+            return jsonResponse({ error: 'Invalid webhook signature' }, { status: 400 });
+        }
+
+        if (event.type !== 'email.received') {
+            return jsonResponse({ ignored: true, type: event.type }, { status: 200 });
+        }
+
+        const emailId = event.data?.email_id;
+        if (!emailId) {
+            return jsonResponse({ error: 'Bad payload: missing data.email_id' }, { status: 400 });
+        }
+
+        const apiKey = getRequiredEnv('RESEND_API_KEY');
+        const category = classifyToAddress(event.data?.to);
+
+        // Webhook payload does not include body/headers; fetch full content via the Receiving API.
+        const receivedEmail = await getReceivedEmailFromResend(emailId, apiKey);
+
+        const store = getStore({ name: 'support-emails', consistency: 'strong' });
+        const timestamp = safeKeyPart(new Date().toISOString());
+        const key = `${timestamp}_${safeKeyPart(category)}_${safeKeyPart(emailId)}`;
+
+        await store.setJSON(key, {
+            category,
+            event,
+            receivedEmail
         });
 
-        event = verified as ResendEmailReceivedEvent;
-    } catch {
-        return new Response('Invalid webhook signature', { status: 400 });
+        return jsonResponse({ stored: true, key, category }, { status: 200 });
+    } catch (error) {
+        console.error('[resend][inbound] handler failed', error);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        return jsonResponse({ error: 'Internal Server Error', message }, { status: 500 });
     }
-
-    if (event.type !== 'email.received') {
-        return new Response(JSON.stringify({ ignored: true, type: event.type }), {
-            status: 200,
-            headers: { 'content-type': 'application/json' }
-        });
-    }
-
-    const emailId = event.data?.email_id;
-    if (!emailId) {
-        return new Response('Bad payload: missing data.email_id', { status: 400 });
-    }
-
-    const category = classifyToAddress(event.data?.to);
-
-    // Webhook payload does not include body/headers; fetch full content via the Receiving API.
-    const receivedEmail = await getReceivedEmailFromResend(emailId);
-
-    const store = getStore('support-emails');
-    const timestamp = safeKeyPart(new Date().toISOString());
-    const key = `${timestamp}_${safeKeyPart(category)}_${safeKeyPart(emailId)}`;
-
-    await store.setJSON(key, {
-        category,
-        event,
-        receivedEmail
-    });
-
-    return new Response(JSON.stringify({ stored: true, key, category }), {
-        status: 200,
-        headers: { 'content-type': 'application/json' }
-    });
 };
