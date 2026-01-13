@@ -22,5 +22,7 @@
     "typescript.tsdk": "node_modules/typescript/lib",
     "files.associations": {
         "*.css": "tailwindcss"
-    }
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "cSpell.words": ["Asimovian", "Noto", "oklab", "Segoe"]
 }
