@@ -1,6 +1,7 @@
 ---
 import { getStore } from '@netlify/blobs';
 import Layout from '../../../layouts/Layout.astro';
+import { extractEmailBody } from '../../../utils/supportEmail';
 
 export const prerender = false;
 
@@ -42,8 +43,7 @@ const to = blob?.event?.data?.to ?? blob?.receivedEmail?.to;
 const createdAt = blob?.event?.data?.created_at ?? blob?.event?.created_at ?? '';
 const category = blob?.category ?? 'unknown';
 
-const text = blob?.receivedEmail?.text ?? blob?.receivedEmail?.textBody ?? '';
-const html = blob?.receivedEmail?.html ?? blob?.receivedEmail?.htmlBody ?? '';
+const { text, html } = extractEmailBody(blob?.receivedEmail);
 const attachments = blob?.receivedEmail?.attachments ?? blob?.event?.data?.attachments ?? [];
 ---
 
@@ -77,7 +77,24 @@ const attachments = blob?.receivedEmail?.attachments ?? blob?.event?.data?.attac
 
             <div class="rounded-lg bg-black/20 p-4 ring-1 ring-white/10">
                 <h2 class="text-xl font-semibold">HTML</h2>
-                {html ? <pre class="mt-3 whitespace-pre-wrap">{html}</pre> : <p class="mt-3 text-gray-400">No HTML body.</p>}
+                {html ? (
+                    <div class="mt-3 space-y-3">
+                        <div class="text-sm text-gray-300">Rendered preview (sandboxed):</div>
+                        <iframe
+                            class="w-full rounded-md bg-white"
+                            sandbox
+                            referrerpolicy="no-referrer"
+                            srcdoc={html}
+                            style="min-height: 420px;"
+                        />
+                        <details>
+                            <summary class="cursor-pointer text-sm font-semibold text-gray-200">View HTML source</summary>
+                            <pre class="mt-3 whitespace-pre-wrap">{html}</pre>
+                        </details>
+                    </div>
+                ) : (
+                    <p class="mt-3 text-gray-400">No HTML body.</p>
+                )}
             </div>
 
             <div class="rounded-lg bg-black/20 p-4 ring-1 ring-white/10">

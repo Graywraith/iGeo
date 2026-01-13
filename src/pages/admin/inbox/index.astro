@@ -2,6 +2,7 @@
 import type { Store } from '@netlify/blobs';
 import { getStore } from '@netlify/blobs';
 import Layout from '../../../layouts/Layout.astro';
+import { makeEmailPreview } from '../../../utils/supportEmail';
 
 export const prerender = false;
 
@@ -95,6 +96,7 @@ const items = await Promise.all(
         const createdAt = blob?.event?.data?.created_at ?? blob?.event?.created_at;
         const categoryValue = blob?.category ?? 'unknown';
         const emailKind = classifySubject(subject);
+        const preview = makeEmailPreview(blob?.receivedEmail);
 
         return {
             key,
@@ -103,7 +105,8 @@ const items = await Promise.all(
             to: Array.isArray(to) ? to.join(', ') : '(unknown recipients)',
             createdAt: createdAt ?? '',
             category: categoryValue,
-            kind: emailKind
+            kind: emailKind,
+            preview
         };
     })
 );
@@ -156,6 +159,7 @@ const makeHref = (next: Record<string, string>) => {
                             </a>
                             <span class={`inline-flex items-center rounded-full px-2 py-1 text-xs ${badgeClass(item.kind)}`}>{labelForKind(item.kind)}</span>
                         </div>
+                        {item.preview && <div class="mt-2 text-sm text-gray-200">{item.preview}</div>}
                         <div class="mt-2 text-sm text-gray-300">
                             <div>
                                 <span class="text-gray-400">From:</span> {item.from}
@@ -173,6 +177,9 @@ const makeHref = (next: Record<string, string>) => {
                                     </div>
                                 )}
                             </div>
+                        </div>
+                        <div class="mt-3">
+                            <a class="btn" href={`/admin/inbox/${encodeURIComponent(item.key)}`}>View</a>
                         </div>
                     </li>
                 ))
