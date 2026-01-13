@@ -1,9 +1,15 @@
 ---
-
+const version = import.meta.env.PUBLIC_APP_VERSION;
+const buildNumber = import.meta.env.PUBLIC_BUILD_NUMBER;
+const buildDate = import.meta.env.PUBLIC_BUILD_DATE;
+const gitSha = import.meta.env.PUBLIC_GIT_SHA;
 ---
 
 <footer class="pt-16 pb-12 sm:pt-24 sm:pb-16">
-    <p>Version 0.1.004 Date: 2024-06-15</p>
+    <p>
+        Version {version} Build {buildNumber} Date: {buildDate}
+        {gitSha ? ` (${gitSha.slice(0, 7)})` : ''}
+    </p>
     <p class="text-sm">
         <a href="https://docs.netlify.com/frameworks/astro/" class="decoration-dashed text-primary underline-offset-8"> Astro on Netlify </a>
     </p>
