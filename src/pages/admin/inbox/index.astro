@@ -1,0 +1,184 @@
+---
+import type { Store } from '@netlify/blobs';
+import { getStore } from '@netlify/blobs';
+import Layout from '../../../layouts/Layout.astro';
+
+export const prerender = false;
+
+type EmailKind = 'general' | 'feature' | 'bug' | 'suggestion';
+
+type StoredSupportEmail = {
+    category?: string;
+    event?: {
+        created_at?: string;
+        data?: {
+            attachments?: unknown[];
+            bcc?: string[];
+            cc?: string[];
+            created_at?: string;
+            email_id?: string;
+            from?: string;
+            message_id?: string;
+            to?: string[];
+            subject?: string;
+        };
+        type?: string;
+    };
+    receivedEmail?: any;
+};
+
+function classifySubject(subject: string | undefined): EmailKind {
+    const s = (subject ?? '').toLowerCase();
+    if (s.includes('feature request') || (s.includes('feature') && s.includes('request'))) return 'feature';
+    if (s.includes('bug')) return 'bug';
+    if (s.includes('suggestion')) return 'suggestion';
+    return 'general';
+}
+
+function labelForKind(kind: EmailKind): string {
+    switch (kind) {
+        case 'feature':
+            return 'Feature Request';
+        case 'bug':
+            return 'Bug';
+        case 'suggestion':
+            return 'Suggestion';
+        default:
+            return 'General';
+    }
+}
+
+function badgeClass(kind: EmailKind): string {
+    switch (kind) {
+        case 'feature':
+            return 'bg-emerald-600/20 text-emerald-200 ring-1 ring-emerald-400/30';
+        case 'bug':
+            return 'bg-red-600/20 text-red-200 ring-1 ring-red-400/30';
+        case 'suggestion':
+            return 'bg-blue-600/20 text-blue-200 ring-1 ring-blue-400/30';
+        default:
+            return 'bg-gray-600/20 text-gray-100 ring-1 ring-gray-400/30';
+    }
+}
+
+function parseLimit(raw: string | null): number {
+    const n = Number.parseInt(raw ?? '', 10);
+    if (!Number.isFinite(n)) return 50;
+    return Math.max(1, Math.min(200, n));
+}
+
+const url = Astro.url;
+const category = url.searchParams.get('category') ?? 'feedback';
+const kind = (url.searchParams.get('kind') ?? 'all').toLowerCase();
+const limit = parseLimit(url.searchParams.get('limit'));
+
+const store = getStore({ name: 'support-emails', consistency: 'strong' }) as Store;
+const { blobs } = await store.list();
+
+let keys = blobs.map((b) => b.key);
+keys.sort().reverse();
+
+if (category !== 'all') {
+    const suffix = `_${category}_`;
+    keys = keys.filter((k) => k.includes(suffix));
+}
+
+keys = keys.slice(0, limit);
+
+const items = await Promise.all(
+    keys.map(async (key) => {
+        const blob = (await store.get(key, { type: 'json' })) as StoredSupportEmail | null;
+
+        const subject = blob?.event?.data?.subject ?? blob?.receivedEmail?.subject;
+        const from = blob?.event?.data?.from ?? blob?.receivedEmail?.from;
+        const to = blob?.event?.data?.to ?? blob?.receivedEmail?.to;
+        const createdAt = blob?.event?.data?.created_at ?? blob?.event?.created_at;
+        const categoryValue = blob?.category ?? 'unknown';
+        const emailKind = classifySubject(subject);
+
+        return {
+            key,
+            subject: subject ?? '(no subject)',
+            from: from ?? '(unknown sender)',
+            to: Array.isArray(to) ? to.join(', ') : '(unknown recipients)',
+            createdAt: createdAt ?? '',
+            category: categoryValue,
+            kind: emailKind
+        };
+    })
+);
+
+const filteredItems = kind === 'all' ? items : items.filter((x) => x.kind === kind);
+
+const basePath = '/admin/inbox';
+const makeHref = (next: Record<string, string>) => {
+    const params = new URLSearchParams();
+    params.set('category', next.category ?? category);
+    params.set('kind', next.kind ?? kind);
+    params.set('limit', next.limit ?? String(limit));
+    return `${basePath}?${params.toString()}`;
+};
+---
+
+<Layout title="Support Inbox">
+    <section class="space-y-6">
+        <header class="space-y-2">
+            <h1>Support inbox</h1>
+            <p class="text-gray-300">Inbound emails stored in Netlify Blobs.</p>
+        </header>
+
+        <div class="flex flex-wrap gap-3">
+            <a class="btn" href={makeHref({ category: 'feedback' })}>Feedback</a>
+            <a class="btn" href={makeHref({ category: 'errors' })}>Errors</a>
+            <a class="btn" href={makeHref({ category: 'other' })}>Other</a>
+            <a class="btn" href={makeHref({ category: 'all' })}>All</a>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+            <a class="btn" href={makeHref({ kind: 'all' })}>All</a>
+            <a class="btn" href={makeHref({ kind: 'general' })}>General</a>
+            <a class="btn" href={makeHref({ kind: 'feature' })}>Feature Request</a>
+            <a class="btn" href={makeHref({ kind: 'bug' })}>Bug</a>
+            <a class="btn" href={makeHref({ kind: 'suggestion' })}>Suggestion</a>
+        </div>
+
+        <div class="text-sm text-gray-300">
+            Showing <span class="font-semibold">{filteredItems.length}</span> of {items.length} emails (limit {limit}).
+        </div>
+
+        <ul class="space-y-3">
+            {
+                filteredItems.map((item) => (
+                    <li class="rounded-lg bg-black/20 p-4 ring-1 ring-white/10">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <a class="text-lg font-semibold no-underline" href={`/admin/inbox/${encodeURIComponent(item.key)}`}>
+                                {item.subject}
+                            </a>
+                            <span class={`inline-flex items-center rounded-full px-2 py-1 text-xs ${badgeClass(item.kind)}`}>{labelForKind(item.kind)}</span>
+                        </div>
+                        <div class="mt-2 text-sm text-gray-300">
+                            <div>
+                                <span class="text-gray-400">From:</span> {item.from}
+                            </div>
+                            <div>
+                                <span class="text-gray-400">To:</span> {item.to}
+                            </div>
+                            <div class="flex flex-wrap gap-x-4">
+                                <div>
+                                    <span class="text-gray-400">Category:</span> {item.category}
+                                </div>
+                                {item.createdAt && (
+                                    <div>
+                                        <span class="text-gray-400">Received:</span> {item.createdAt}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </li>
+                ))
+            }
+        </ul>
+
+        {filteredItems.length === 0 && <div class="rounded-lg bg-black/20 p-6 ring-1 ring-white/10">No emails found for this filter.</div>}
+    </section>
+</Layout>

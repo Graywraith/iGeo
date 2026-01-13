@@ -8,8 +8,12 @@ type ResendEmailReceivedEvent = {
     type: 'email.received' | string;
     created_at?: string;
     data?: {
+        attachments?: unknown[];
+        bcc?: string[];
+        cc?: string[];
         email_id?: string;
         from?: string;
+        message_id?: string;
         to?: string[];
         subject?: string;
     };
