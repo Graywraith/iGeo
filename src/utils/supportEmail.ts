@@ -23,13 +23,7 @@ export function extractEmailBody(receivedEmail: any): ExtractedEmailBody {
         receivedEmail.content?.plain
     ];
 
-    const htmlCandidates = [
-        receivedEmail.html,
-        receivedEmail.htmlBody,
-        receivedEmail.body_html,
-        receivedEmail.bodyHtml,
-        receivedEmail.content?.html
-    ];
+    const htmlCandidates = [receivedEmail.html, receivedEmail.htmlBody, receivedEmail.body_html, receivedEmail.bodyHtml, receivedEmail.content?.html];
 
     const text = textCandidates.map(coerceString).find((s) => s.length > 0) ?? '';
     const html = htmlCandidates.map(coerceString).find((s) => s.length > 0) ?? '';
