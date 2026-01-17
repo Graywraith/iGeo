@@ -25,10 +25,12 @@
         "npm:blobshape@1",
         "npm:marked-shiki@^1.2.0",
         "npm:marked@13",
+        "npm:png-to-ico@^2.1.8",
         "npm:prettier-plugin-tailwindcss@~0.6.14",
         "npm:prettier@^3.6.2",
         "npm:react-dom@^18.2.0",
         "npm:react@^18.2.0",
+        "npm:sharp@~0.34.3",
         "npm:svix@^1.68.0",
         "npm:tailwindcss@^4.0.14",
         "npm:unique-names-generator@^4.7.1"
