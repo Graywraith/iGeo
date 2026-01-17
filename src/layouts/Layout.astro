@@ -19,8 +19,24 @@ const { title } = Astro.props;
         <title>{title}</title>
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <!-- Standard favicon -->
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+        <!-- Android / PWA -->
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#355c7d" />
+
+        <!-- Windows tiles -->
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name="msapplication-TileColor" content="#355c7d" />
+
         <link rel="preload" as="font" type="font/woff2" href={interWoff2} crossorigin />
+        <script
+            src="https://www.paypal.com/sdk/js?client-id=BAADpVKp0dvjJXdt-hQk8TUxnL5vqwKIqkoXXqkuZ8q70ZfFMpvDt6pVHs71F-c5-7bdsHFPRs1ieq_kbw&components=hosted-buttons&disable-funding=venmo&currency=GBP"
+        ></script>
     </head>
     <body class="antialiased text-white bg-complementary">
         <div class="flex flex-col min-h-screen px-6 bg-noise sm:px-12">

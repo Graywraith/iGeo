@@ -21,9 +21,48 @@ Currently, FossilGeo is available as a web application and an Android app, with 
     <ContextAlert class="mb-8" />
     <h1 class="mb-10">Fossil Geo</h1>
     <!-- <Markdown content={explainer} class="mb-10 text-lg" /> -->
+    <h3 class="mb-4 text-2xl font-semibold">Learn about deep time, climate and environment</h3>
     <Markdown content={aboutFossilGeo} class="mb-10 text-lg" />
-    <p>
-        <!-- <a href="https://docs.netlify.com/frameworks/astro/" class="btn btn-lg sm:min-w-64">Read the Docs</a> -->
-        <a href="/disclaimer" class="btn btn-lg btn-secondary sm:min-w-64 ml-4">Disclaimer</a>
-    </p>
+    <!-- Add in here the PayPal button to raise funds for the project   -->
+    <section class="flex-row">
+        <div class="float-right">
+            <style>
+                .pp-TFTJAQYYKMXM4 {
+                    text-align: center;
+                    border: none;
+                    border-radius: 0.25rem;
+                    min-width: 11.625rem;
+                    padding: 0 2rem;
+                    height: 2.625rem;
+                    font-weight: bold;
+                    background-color: #f67280;
+                    color: #000000;
+                    font-family: 'Helvetica Neue', Arial, sans-serif;
+                    font-size: 1rem;
+                    line-height: 1.25rem;
+                    cursor: pointer;
+                }
+            </style>
+            <form
+                action="https://www.paypal.com/ncp/payment/TFTJAQYYKMXM4"
+                method="post"
+                target="_blank"
+                style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;"
+            >
+                <input class="pp-TFTJAQYYKMXM4" type="submit" value="Donate Now" />
+                <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" alt="cards" />
+                <section style="font-size: 0.75rem;">
+                    Powered by <img
+                        src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg"
+                        alt="paypal"
+                        style="height:0.875rem;vertical-align:middle;"
+                    />
+                </section>
+            </form>
+        </div>
+        <p>
+            <!-- <a href="https://docs.netlify.com/frameworks/astro/" class="btn btn-lg sm:min-w-64">Read the Docs</a> -->
+            <a href="/disclaimer" class="btn btn-lg btn-secondary sm:min-w-64 ml-4">Disclaimer</a>
+        </p>
+    </section>
 </Layout>

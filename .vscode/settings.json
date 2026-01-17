@@ -24,5 +24,9 @@
         "*.css": "tailwindcss"
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "cSpell.words": ["Asimovian", "Noto", "oklab", "Segoe"]
+    "cSpell.words": ["Asimovian", "Noto", "oklab", "Segoe"],
+    "chat.tools.terminal.autoApprove": {
+        "npx -y prettier": true,
+        "npm install": true
+    }
 }

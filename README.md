@@ -98,3 +98,12 @@ Once an inbound email is received and stored:
 If `SUPPORT_EMAILS_ADMIN_TOKEN` is set, include:
 
 - `Authorization: Bearer <SUPPORT_EMAILS_ADMIN_TOKEN>`
+
+## Admin area Basic Auth
+
+This repo includes a Netlify Edge Function that protects `/admin/*` with HTTP Basic Auth.
+
+Set one of the following in Netlify Site settings → Build & deploy → Environment:
+
+- `ADMIN_BASIC_AUTH` – format `username:password`
+- OR `ADMIN_USER` and `ADMIN_PASS`

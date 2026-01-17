@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ContextAlert from '../../components/ContextAlert.astro';
+import Markdown from '../../components/Markdown.astro';
+
+const explainer = ``;
+
+const aboutFossilGeo = `
+FossilGeo is a cross-platform application designed to provide users with geographic and geological information, primarily focused on the United Kingdom although it also includes data from many other regions. The app offers data on various geological features, fossil locations, and other related information to assist users of all ages in their exploration of the world beneath their feet.
+
+Currently, FossilGeo is available as a web application and an Android app, with plans to expand to iOS in the future. The app is built using modern web technologies, including Astro for the web version, ensuring a fast and responsive user experience. So far very much a work in progress, but the goal is to create a comprehensive resource for anyone interested in geology and fossils.
+`;
+---
+
+<Layout title="Welcome to the Fossil Geo Website">
+    <!-- <ContextAlert class="mb-8" /> -->
+    <h1 class="mb-10">Fossil Geo</h1>
+    <!-- <Markdown content={explainer} class="mb-10 text-lg" /> -->
+    <h3 class="mb-4 text-2xl font-semibold">Admin and Settings</h3>
+    <!-- <Markdown content={aboutFossilGeo} class="mb-10 text-lg" /> -->
+    <section class="flex-row">
+        <p>
+            <!-- <a href="https://docs.netlify.com/frameworks/astro/" class="btn btn-lg sm:min-w-64">Read the Docs</a> -->
+            <a href="/inbox/index.astro" class="btn btn-lg btn-secondary sm:min-w-64 ml-4">Inbox</a>
+        </p>
+    </section>
+</Layout>
