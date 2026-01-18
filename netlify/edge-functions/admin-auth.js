@@ -21,98 +21,92 @@ function getEnv(name) {
     return undefined;
 }
 
-function parseBasicAuth(headerValue) {
-    if (!headerValue) return undefined;
+const SESSION_COOKIE_NAME = 'admin_session';
 
-    const [scheme, value] = headerValue.split(' ');
-    if (!scheme || scheme.toLowerCase() !== 'basic' || !value) return undefined;
-
-    let decoded;
-    try {
-        decoded = atob(value);
-    } catch {
-        return undefined;
-    }
-
-    const colonIndex = decoded.indexOf(':');
-    if (colonIndex === -1) return undefined;
-
-    const username = decoded.slice(0, colonIndex);
-    const password = decoded.slice(colonIndex + 1);
-
-    return { username, password };
+function base64UrlEncode(bytes) {
+    const binary = String.fromCharCode(...bytes);
+    return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 }
 
-function unauthorized(realm = 'Admin') {
-    const html = `<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="color-scheme" content="dark" />
-        <title>Authorization required</title>
-        <style>
-            :root {
-                color-scheme: dark;
-            }
-            html, body {
-                height: 100%;
-                margin: 0;
-            }
-            body {
-                font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-                color: rgba(255, 255, 255, 0.9);
-                background-color: #0b0f14;
-                background:
-                    radial-gradient(900px 600px at 20% 10%, rgba(53, 92, 125, 0.55), transparent 60%),
-                    radial-gradient(800px 520px at 80% 30%, rgba(92, 49, 125, 0.45), transparent 55%),
-                    linear-gradient(180deg, #0b0f14 0%, #0a0a0a 100%);
-                display: grid;
-                place-items: center;
-            }
-            .card {
-                width: min(720px, calc(100% - 2.5rem));
-                padding: 1.25rem 1.25rem;
-                border-radius: 16px;
-                background: rgba(0, 0, 0, 0.35);
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
-                backdrop-filter: blur(8px);
-            }
-            h1 {
-                font-size: 1.1rem;
-                margin: 0 0 0.5rem 0;
-                font-weight: 650;
-            }
-            p {
-                margin: 0;
-                line-height: 1.5;
-                color: rgba(255, 255, 255, 0.75);
-            }
-            code {
-                color: rgba(255, 255, 255, 0.9);
-            }
-        </style>
-    </head>
-    <body>
-        <main class="card" role="main">
-            <h1>Sign in required</h1>
-            <p>This area is protected. Your browser will prompt for a username and password.</p>
-        </main>
-    </body>
-</html>`;
+function base64UrlDecodeToBytes(value) {
+    const padded = value
+        .replace(/-/g, '+')
+        .replace(/_/g, '/')
+        .padEnd(Math.ceil(value.length / 4) * 4, '=');
+    const binary = atob(padded);
+    return Uint8Array.from(binary, (c) => c.charCodeAt(0));
+}
 
-    return new Response(html, {
-        status: 401,
+function toUtf8Bytes(value) {
+    return new TextEncoder().encode(value);
+}
+
+function parseCookies(headerValue) {
+    const cookies = {};
+    if (!headerValue) return cookies;
+    for (const part of headerValue.split(';')) {
+        const [rawName, ...rest] = part.trim().split('=');
+        if (!rawName) continue;
+        cookies[rawName] = rest.join('=');
+    }
+    return cookies;
+}
+
+function timingSafeEqual(a, b) {
+    if (a.length !== b.length) return false;
+    let result = 0;
+    for (let i = 0; i < a.length; i++) result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    return result === 0;
+}
+
+async function hmacSignBase64Url(secret, message) {
+    const key = await crypto.subtle.importKey('raw', toUtf8Bytes(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    const sig = await crypto.subtle.sign('HMAC', key, toUtf8Bytes(message));
+    return base64UrlEncode(new Uint8Array(sig));
+}
+
+async function createSessionToken({ secret, username, ttlSeconds }) {
+    const exp = Math.floor(Date.now() / 1000) + ttlSeconds;
+    const payload = { u: username, exp };
+    const payloadB64 = base64UrlEncode(toUtf8Bytes(JSON.stringify(payload)));
+    const sigB64 = await hmacSignBase64Url(secret, payloadB64);
+    return `${payloadB64}.${sigB64}`;
+}
+
+async function verifySessionToken({ secret, token }) {
+    if (!token || !token.includes('.')) return { ok: false };
+    const [payloadB64, sigB64] = token.split('.', 2);
+    if (!payloadB64 || !sigB64) return { ok: false };
+
+    const expectedSigB64 = await hmacSignBase64Url(secret, payloadB64);
+    if (!timingSafeEqual(expectedSigB64, sigB64)) return { ok: false };
+
+    let payload;
+    try {
+        const payloadJson = new TextDecoder().decode(base64UrlDecodeToBytes(payloadB64));
+        payload = JSON.parse(payloadJson);
+    } catch {
+        return { ok: false };
+    }
+
+    const exp = Number(payload?.exp);
+    if (!Number.isFinite(exp) || exp <= Math.floor(Date.now() / 1000)) return { ok: false };
+
+    return { ok: true, username: String(payload?.u ?? '') };
+}
+
+function redirect(location, extraHeaders = {}) {
+    return new Response(null, {
+        status: 303,
         headers: {
-            'Content-Type': 'text/html; charset=utf-8',
-            'WWW-Authenticate': `Basic realm="${realm}", charset="UTF-8"`,
-            'Cache-Control': 'no-store'
+            Location: location,
+            'Cache-Control': 'no-store',
+            ...extraHeaders
         }
     });
 }
 
-export default async (request, context) => {
+function getConfiguredCredentials() {
     const configuredPair = getEnv('ADMIN_BASIC_AUTH');
     const configuredUser = getEnv('ADMIN_USER');
     const configuredPass = getEnv('ADMIN_PASS');
@@ -129,6 +123,12 @@ export default async (request, context) => {
         expectedPass = configuredPass;
     }
 
+    return { expectedUser, expectedPass };
+}
+
+export default async (request, context) => {
+    const { expectedUser, expectedPass } = getConfiguredCredentials();
+
     if (!expectedUser || !expectedPass) {
         return new Response('Admin auth is not configured. Set ADMIN_BASIC_AUTH (user:pass) or ADMIN_USER + ADMIN_PASS.', {
             status: 500,
@@ -136,9 +136,53 @@ export default async (request, context) => {
         });
     }
 
-    const auth = parseBasicAuth(request.headers.get('authorization'));
-    if (!auth || auth.username !== expectedUser || auth.password !== expectedPass) {
-        return unauthorized('Admin');
+    const sessionSecret = getEnv('ADMIN_SESSION_SECRET') ?? expectedPass;
+
+    const url = new URL(request.url);
+    const pathname = url.pathname;
+
+    // Allow the login screen to render.
+    if (request.method === 'GET' && pathname === '/admin/login') {
+        return context.next();
+    }
+
+    // Handle login submission.
+    if (request.method === 'POST' && pathname === '/admin/login') {
+        let form;
+        try {
+            form = await request.formData();
+        } catch {
+            form = new FormData();
+        }
+
+        const username = String(form.get('username') ?? '');
+        const password = String(form.get('password') ?? '');
+        const next = String(form.get('next') ?? '/admin/');
+
+        if (username !== expectedUser || password !== expectedPass) {
+            const nextParam = encodeURIComponent(next);
+            return redirect(`/admin/login?error=1&next=${nextParam}`);
+        }
+
+        const token = await createSessionToken({ secret: sessionSecret, username, ttlSeconds: 60 * 60 * 24 * 7 });
+        const cookie = `${SESSION_COOKIE_NAME}=${token}; Path=/admin; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 7}`;
+
+        return redirect(next.startsWith('/admin/') ? next : '/admin/', { 'Set-Cookie': cookie });
+    }
+
+    // Logout: clear cookie.
+    if (request.method === 'GET' && pathname === '/admin/logout') {
+        const cookie = `${SESSION_COOKIE_NAME}=; Path=/admin; HttpOnly; Secure; SameSite=Lax; Max-Age=0`;
+        return redirect('/admin/login', { 'Set-Cookie': cookie });
+    }
+
+    // Protect everything else under /admin.
+    const cookies = parseCookies(request.headers.get('cookie'));
+    const token = cookies[SESSION_COOKIE_NAME];
+    const verified = await verifySessionToken({ secret: sessionSecret, token });
+    if (!verified.ok) {
+        const next = encodeURIComponent(`${pathname}${url.search}`);
+        return redirect(`/admin/login?next=${next}`);
     }
 
     return context.next();

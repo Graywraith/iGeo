@@ -1,0 +1,70 @@
+---
+import '../../src/styles/globals.css';
+import '@fontsource-variable/inter/wght.css';
+import interWoff2 from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+    title: string;
+    backgroundUrl: string | ImageMetadata;
+}
+
+const { title, backgroundUrl } = Astro.props;
+const backgroundSrc = typeof backgroundUrl === 'string' ? backgroundUrl : backgroundUrl.src;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>{title}</title>
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <meta name="color-scheme" content="dark" />
+
+        <link rel="preload" as="font" type="font/woff2" href={interWoff2} crossorigin />
+    </head>
+    <body class="antialiased text-white bg-complementary">
+        <div class="auth-page">
+            <div class="auth-bg" style={`background-image: url(${backgroundSrc});`}></div>
+            <main class="auth-content"><slot /></main>
+        </div>
+    </body>
+</html>
+
+<style>
+    .auth-page {
+        position: relative;
+        min-height: 100vh;
+        isolation: isolate;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1.25rem;
+    }
+
+    .auth-bg {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        filter: saturate(1.05) contrast(1.05);
+    }
+
+    .auth-bg::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(1200px 800px at 20% 10%, rgba(53, 92, 125, 0.55), transparent 60%),
+            radial-gradient(1000px 700px at 90% 30%, rgba(92, 49, 125, 0.45), transparent 55%),
+            linear-gradient(180deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.78) 100%);
+    }
+
+    .auth-content {
+        width: 100%;
+        max-width: 30rem;
+    }
+</style>

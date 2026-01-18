@@ -1,0 +1,65 @@
+---
+import AdminAuthLayout from '../../layouts/AdminAuthLayout.astro';
+import adminBackgroundUrl from '../../assets/admin-background.jpg';
+
+const url = Astro.url;
+const next = url.searchParams.get('next') ?? '/admin/';
+const error = url.searchParams.get('error');
+---
+
+<AdminAuthLayout title="Admin login" backgroundUrl={adminBackgroundUrl}>
+    <section class="card" aria-labelledby="title">
+        <h1 id="title" class="text-2xl font-semibold">Admin sign in</h1>
+        <p class="mt-2 text-gray-200">Sign in to access admin pages.</p>
+
+        {error && <div class="mt-4 rounded-lg bg-red-600/20 p-3 text-sm text-red-100 ring-1 ring-red-400/30">Incorrect username or password.</div>}
+
+        <form class="mt-6 space-y-4" method="post" action="/admin/login">
+            <input type="hidden" name="next" value={next} />
+
+            <label class="block">
+                <span class="text-sm text-gray-200">Username</span>
+                <input class="input mt-1 w-full" type="text" name="username" autocomplete="username" required />
+            </label>
+
+            <label class="block">
+                <span class="text-sm text-gray-200">Password</span>
+                <input class="input mt-1 w-full" type="password" name="password" autocomplete="current-password" required />
+            </label>
+
+            <div class="flex items-center justify-between gap-3">
+                <button class="btn btn-secondary" type="submit">Sign in</button>
+                <a class="text-sm text-gray-200 hover:text-white" href="/">Back to site</a>
+            </div>
+        </form>
+
+        <p class="mt-6 text-xs text-gray-300">
+            Tip: bookmark <code class="rounded bg-black/30 px-1 py-0.5">/admin/</code>
+        </p>
+    </section>
+</AdminAuthLayout>
+
+<style>
+    .card {
+        padding: 1.5rem;
+        border-radius: 16px;
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(10px);
+    }
+
+    :global(.input) {
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 10px;
+        padding: 0.6rem 0.75rem;
+        color: white;
+        outline: none;
+    }
+
+    :global(.input:focus) {
+        border-color: rgba(255, 255, 255, 0.35);
+        box-shadow: 0 0 0 3px rgba(53, 92, 125, 0.35);
+    }
+</style>
