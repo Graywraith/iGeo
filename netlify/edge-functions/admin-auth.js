@@ -49,6 +49,7 @@ function unauthorized(realm = 'Admin') {
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="color-scheme" content="dark" />
         <title>Authorization required</title>
         <style>
             :root {
@@ -61,6 +62,7 @@ function unauthorized(realm = 'Admin') {
             body {
                 font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
                 color: rgba(255, 255, 255, 0.9);
+                background-color: #0b0f14;
                 background:
                     radial-gradient(900px 600px at 20% 10%, rgba(53, 92, 125, 0.55), transparent 60%),
                     radial-gradient(800px 520px at 80% 30%, rgba(92, 49, 125, 0.45), transparent 55%),
