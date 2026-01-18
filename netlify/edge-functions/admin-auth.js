@@ -44,9 +44,66 @@ function parseBasicAuth(headerValue) {
 }
 
 function unauthorized(realm = 'Admin') {
-    return new Response('Unauthorized', {
+    const html = `<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Authorization required</title>
+        <style>
+            :root {
+                color-scheme: dark;
+            }
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+            body {
+                font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+                color: rgba(255, 255, 255, 0.9);
+                background:
+                    radial-gradient(900px 600px at 20% 10%, rgba(53, 92, 125, 0.55), transparent 60%),
+                    radial-gradient(800px 520px at 80% 30%, rgba(92, 49, 125, 0.45), transparent 55%),
+                    linear-gradient(180deg, #0b0f14 0%, #0a0a0a 100%);
+                display: grid;
+                place-items: center;
+            }
+            .card {
+                width: min(720px, calc(100% - 2.5rem));
+                padding: 1.25rem 1.25rem;
+                border-radius: 16px;
+                background: rgba(0, 0, 0, 0.35);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+                backdrop-filter: blur(8px);
+            }
+            h1 {
+                font-size: 1.1rem;
+                margin: 0 0 0.5rem 0;
+                font-weight: 650;
+            }
+            p {
+                margin: 0;
+                line-height: 1.5;
+                color: rgba(255, 255, 255, 0.75);
+            }
+            code {
+                color: rgba(255, 255, 255, 0.9);
+            }
+        </style>
+    </head>
+    <body>
+        <main class="card" role="main">
+            <h1>Sign in required</h1>
+            <p>This area is protected. Your browser will prompt for a username and password.</p>
+        </main>
+    </body>
+</html>`;
+
+    return new Response(html, {
         status: 401,
         headers: {
+            'Content-Type': 'text/html; charset=utf-8',
             'WWW-Authenticate': `Basic realm="${realm}", charset="UTF-8"`,
             'Cache-Control': 'no-store'
         }
