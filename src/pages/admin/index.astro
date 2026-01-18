@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ContextAlert from '../../components/ContextAlert.astro';
 import Markdown from '../../components/Markdown.astro';
+import adminBackgroundUrl from '../../assets/admin-background.jpg';
 
 const explainer = ``;
 
@@ -13,15 +14,51 @@ Currently, FossilGeo is available as a web application and an Android app, with 
 ---
 
 <Layout title="Welcome to the Fossil Geo Website">
-    <!-- <ContextAlert class="mb-8" /> -->
-    <h1 class="mb-10">Fossil Geo</h1>
-    <!-- <Markdown content={explainer} class="mb-10 text-lg" /> -->
-    <h3 class="mb-4 text-2xl font-semibold">Admin and Settings</h3>
-    <!-- <Markdown content={aboutFossilGeo} class="mb-10 text-lg" /> -->
-    <section class="flex-row">
-        <p>
-            <!-- <a href="https://docs.netlify.com/frameworks/astro/" class="btn btn-lg sm:min-w-64">Read the Docs</a> -->
-            <a href="/admin/inbox/" class="btn btn-lg btn-secondary sm:min-w-64 ml-4">Inbox</a>
-        </p>
-    </section>
+    <div class="admin-page">
+        <div class="admin-page__bg" style={`background-image: url(${adminBackgroundUrl});`}></div>
+        <div class="admin-page__content">
+            <!-- <ContextAlert class="mb-8" /> -->
+            <h1 class="mb-10">Fossil Geo</h1>
+            <!-- <Markdown content={explainer} class="mb-10 text-lg" /> -->
+            <h3 class="mb-4 text-2xl font-semibold">Admin and Settings</h3>
+            <!-- <Markdown content={aboutFossilGeo} class="mb-10 text-lg" /> -->
+            <section class="flex-row">
+                <p>
+                    <!-- <a href="https://docs.netlify.com/frameworks/astro/" class="btn btn-lg sm:min-w-64">Read the Docs</a> -->
+                    <a href="/admin/inbox/" class="btn btn-lg btn-secondary sm:min-w-64 ml-4">Inbox</a>
+                </p>
+            </section>
+        </div>
+    </div>
 </Layout>
+
+<style>
+    .admin-page {
+        position: relative;
+        isolation: isolate;
+        min-height: 60vh;
+    }
+
+    .admin-page__bg {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        filter: saturate(1.05) contrast(1.05);
+    }
+
+    .admin-page__bg::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.55) 40%, rgba(0, 0, 0, 0.72) 100%);
+    }
+
+    .admin-page__content {
+        position: relative;
+        padding: 1.25rem 0;
+    }
+</style>
