@@ -140,14 +140,16 @@ export default async (request, context) => {
 
     const url = new URL(request.url);
     const pathname = url.pathname;
+    const normalizedPathname = pathname !== '/' ? pathname.replace(/\/+$/g, '') : pathname;
+    const cookieSecureAttribute = url.protocol === 'https:' ? ' Secure;' : '';
 
     // Allow the login screen to render.
-    if (request.method === 'GET' && pathname === '/admin/login') {
+    if (request.method === 'GET' && normalizedPathname === '/admin/login') {
         return context.next();
     }
 
     // Handle login submission.
-    if (request.method === 'POST' && pathname === '/admin/login') {
+    if (request.method === 'POST' && normalizedPathname === '/admin/login') {
         let form;
         try {
             form = await request.formData();
@@ -161,19 +163,19 @@ export default async (request, context) => {
 
         if (username !== expectedUser || password !== expectedPass) {
             const nextParam = encodeURIComponent(next);
-            return redirect(`/admin/login?error=1&next=${nextParam}`);
+            return redirect(`/admin/login/?error=1&next=${nextParam}`);
         }
 
         const token = await createSessionToken({ secret: sessionSecret, username, ttlSeconds: 60 * 60 * 24 * 7 });
-        const cookie = `${SESSION_COOKIE_NAME}=${token}; Path=/admin; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 7}`;
+        const cookie = `${SESSION_COOKIE_NAME}=${token}; Path=/admin; HttpOnly;${cookieSecureAttribute} SameSite=Lax; Max-Age=${60 * 60 * 24 * 7}`;
 
         return redirect(next.startsWith('/admin/') ? next : '/admin/', { 'Set-Cookie': cookie });
     }
 
     // Logout: clear cookie.
-    if (request.method === 'GET' && pathname === '/admin/logout') {
-        const cookie = `${SESSION_COOKIE_NAME}=; Path=/admin; HttpOnly; Secure; SameSite=Lax; Max-Age=0`;
-        return redirect('/admin/login', { 'Set-Cookie': cookie });
+    if (request.method === 'GET' && normalizedPathname === '/admin/logout') {
+        const cookie = `${SESSION_COOKIE_NAME}=; Path=/admin; HttpOnly;${cookieSecureAttribute} SameSite=Lax; Max-Age=0`;
+        return redirect('/admin/login/', { 'Set-Cookie': cookie });
     }
 
     // Protect everything else under /admin.
@@ -182,7 +184,7 @@ export default async (request, context) => {
     const verified = await verifySessionToken({ secret: sessionSecret, token });
     if (!verified.ok) {
         const next = encodeURIComponent(`${pathname}${url.search}`);
-        return redirect(`/admin/login?next=${next}`);
+        return redirect(`/admin/login/?next=${next}`);
     }
 
     return context.next();

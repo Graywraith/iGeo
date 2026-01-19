@@ -27,6 +27,7 @@
     "cSpell.words": ["Asimovian", "Noto", "oklab", "Segoe"],
     "chat.tools.terminal.autoApprove": {
         "npx -y prettier": true,
-        "npm install": true
+        "npm install": true,
+        "npx netlify": true
     }
 }

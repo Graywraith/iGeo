@@ -14,7 +14,7 @@ const error = url.searchParams.get('error');
 
         {error && <div class="mt-4 rounded-lg bg-red-600/20 p-3 text-sm text-red-100 ring-1 ring-red-400/30">Incorrect username or password.</div>}
 
-        <form class="mt-6 space-y-4" method="post" action="/admin/login">
+        <form class="mt-6 space-y-4" method="post" action="/admin/login/">
             <input type="hidden" name="next" value={next} />
 
             <label class="block">
