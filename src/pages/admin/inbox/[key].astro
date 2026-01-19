@@ -47,7 +47,7 @@ const { text, html } = extractEmailBody(blob?.receivedEmail);
 const attachments = blob?.receivedEmail?.attachments ?? blob?.event?.data?.attachments ?? [];
 ---
 
-<Layout title={`Support Email: ${subject}`}>
+<Layout title={`Support Email: ${subject}`} noindex>
     <section class="space-y-6">
         <a class="btn" href="/admin/inbox">← Back to inbox</a>
 

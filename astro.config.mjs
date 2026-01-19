@@ -46,6 +46,7 @@ const gitSha = process.env.PUBLIC_GIT_SHA || process.env.COMMIT_REF || process.e
 
 // https://astro.build/config
 export default defineConfig({
+    site: 'https://fossilgeo.uk',
     vite: {
         plugins: [tailwindcss()],
         define: {
