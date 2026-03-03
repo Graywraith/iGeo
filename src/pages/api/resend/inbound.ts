@@ -114,7 +114,27 @@ export const POST: APIRoute = async ({ request }) => {
             receivedEmail
         });
 
-        return jsonResponse({ stored: true, key, category }, { status: 200 });
+        // Send alert email to private address using Resend
+        const alertRecipient = 'noake.richard@gmail.com';
+        const alertSubject = `iGeo: New email received (${category})`;
+        const alertBody = `A new email was received in iGeo.\n\nFrom: ${event.data?.from}\nTo: ${(event.data?.to ?? []).join(', ')}\nSubject: ${event.data?.subject}\n\nEmail ID: ${emailId}\nCategory: ${category}\n\nView details in your admin panel.`;
+
+        // Send via Resend API
+        await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                from: 'noreply@fossilgeo.uk',
+                to: alertRecipient,
+                subject: alertSubject,
+                text: alertBody
+            })
+        });
+
+        return jsonResponse({ stored: true, key, category, alertSent: true }, { status: 200 });
     } catch (error) {
         console.error('[resend][inbound] handler failed', error);
         const message = error instanceof Error ? error.message : 'Unknown error';
