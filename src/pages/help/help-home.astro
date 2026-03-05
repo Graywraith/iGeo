@@ -4,18 +4,22 @@ import { Image } from 'astro:assets';
 import homeDark from '../../assets/home-dark.png';
 ---
 
-<p>
-    <Image
-        src={homeDark}
-        alt="home page dark mode"
-        style="float: right; margin: 0 0 1em 2em; width: 300px; max-width: 40vw; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
-    />
-    This screenshot shows the home page of the app in dark mode. The app is designed to be simple and intuitive to use, with a focus on providing useful information
-    about fossils and geology. You can explore different locations, view fossil records, and learn about the geological history of different areas. The app is still
-    in development, so there may be some bugs and missing features, but I'm working hard to make it as useful and enjoyable as possible.
-</p>
-<p>
-    In this image you can see the main features of the home page, including the search bar at the top where you can enter a location to explore, and the various
-    sections below that provide information about fossils, geology, and other related topics. You can click on different sections to learn more about specific
-    topics, and there are also links to other pages where you can find more detailed information and resources.
-</p>
+<Layout title="Home Page Help">
+    <section class="home-page-section">
+        <p>
+            <Image
+                src={homeDark}
+                alt="home page dark mode"
+                style="float: right; margin: 0 0 1em 2em; width: 300px; max-width: 40vw; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
+            />
+            This screenshot shows the home page of the app in dark mode. The app is designed to be simple and intuitive to use, with a focus on providing useful
+            information about fossils and geology. You can explore different locations, view fossil records, and learn about the geological history of different
+            areas. The app is still in development, so there may be some bugs and missing features, but I'm working hard to make it as useful and enjoyable as possible.
+        </p>
+        <p>
+            In this image you can see the main features of the home page, including the search bar at the top where you can enter a location to explore, and the
+            various sections below that provide information about fossils, geology, and other related topics. You can click on different sections to learn more
+            about specific topics, and there are also links to other pages where you can find more detailed information and resources.
+        </p>
+    </section>
+</Layout>
