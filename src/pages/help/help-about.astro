@@ -19,9 +19,11 @@ import Layout from '../../layouts/Layout.astro';
                 favourite locations, which can be easily accessed from the home page. This allows users to quickly view geological and fossil information for
                 their preferred locations without having to search for them each time.
             </p>
-            <!--  <p>
+            <p>
                 <img
-                    src="/src/assets/home-dark.png"
+                    srcset="/.netlify/images?url=/src/assets/home-dark.png&w=640 640w, /.netlify/images?url=/src/assets/home-dark.png&w=1280 1280w, /.netlify/images?url=/src/assets/home-dark.png&w=2048 2048w"
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    src="/.netlify/images?url=/src/assets/home-dark.png&w=640"
                     alt="home page dark mode"
                     style="float: right; margin: 0 0 1em 2em; width: 300px; max-width: 40vw; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
                 />
@@ -30,7 +32,6 @@ import Layout from '../../layouts/Layout.astro';
                 areas. The app is still in development, so there may be some bugs and missing features, but I'm working hard to make it as useful and enjoyable as
                 possible.
             </p>
-            <p> -->
         </div>
     </section>
 </Layout>

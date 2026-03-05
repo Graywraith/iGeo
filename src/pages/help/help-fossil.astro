@@ -15,7 +15,9 @@ import Layout from '../../layouts/Layout.astro';
             </p>
             <p>
                 <img
-                    src="/src/assets/fossil-local-dark.png"
+                    srcset="/.netlify/images?url=/src/assets/fossil-local-dark.png&w=640 640w, /.netlify/images?url=/src/assets/fossil-local-dark.png&w=1280 1280w, /.netlify/images?url=/src/assets/fossil-local-dark.png&w=2048 2048w"
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    src="/.netlify/images?url=/src/assets/fossil-local-dark.png&w=640"
                     alt="fossils page dark mode"
                     style="float: right; margin: 0 0 1em 2em; width: 300px; max-width: 40vw; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
                 />
@@ -32,7 +34,9 @@ import Layout from '../../layouts/Layout.astro';
             </p>
             <p class="pt-15">
                 <img
-                    src="/src/assets/fossil-detail-dark.png"
+                    srcset="/.netlify/images?url=/src/assets/fossil-detail-dark.png&w=640 640w, /.netlify/images?url=/src/assets/fossil-detail-dark.png&w=1280 1280w, /.netlify/images?url=/src/assets/fossil-detail-dark.png&w=2048 2048w"
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    src="/.netlify/images?url=/src/assets/fossil-detail-dark.png&w=640"
                     alt="fossils detail page dark mode"
                     style="float: left; margin: 1em 2em 0em 0em; width: 300px; max-width: 40vw; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
                 />
@@ -40,7 +44,8 @@ import Layout from '../../layouts/Layout.astro';
                     This screenshot shows the fossils detail page of the app in dark mode. The image shows the detailed information about a specific fossil,
                     including its classification, age, and the environment it lived in. The page is designed to be informative and visually engaging, with a
                     focus on providing useful information about the fossils and their geological context. You can explore different fossil groups, learn about
-                    their age and significance, and view images and descriptions of notable fossil finds. The fossils detail page is a great way to gain a deeper understanding of the ancient organisms that once inhabited our planet and their significance in understanding Earth's history.
+                    their age and significance, and view images and descriptions of notable fossil finds. The fossils detail page is a great way to gain a
+                    deeper understanding of the ancient organisms that once inhabited our planet and their significance in understanding Earth's history.
                 </p>
             </p>
         </div>

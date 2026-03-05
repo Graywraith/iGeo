@@ -7,18 +7,27 @@ import Layout from '../../layouts/Layout.astro';
         <h2 class="text-teal-400 my-1.5">Disclaimer</h2>
         <div>
             <p>
-               This page is aimed at giving you a bit of an idea of how to use the app and how to gain the most from it. It's a work in progress and will be updated as the app develops but I wanted to get something up there to give you an idea of what I'm trying to do with this project and how it can be used to explore the world of fossils and geology.
+                This page is aimed at giving you a bit of an idea of how to use the app and how to gain the most from it. It's a work in progress and will be
+                updated as the app develops but I wanted to get something up there to give you an idea of what I'm trying to do with this project and how it can
+                be used to explore the world of fossils and geology.
             </p>
             <p>
                 <img
-                    src="/src/assets/home-dark.png"
+                    srcset="/.netlify/images?url=/src/assets/home-dark.png&w=640 640w, /.netlify/images?url=/src/assets/home-dark.png&w=1280 1280w, /.netlify/images?url=/src/assets/home-dark.png&w=2048 2048w"
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    src="/.netlify/images?url=/src/assets/home-dark.png&w=640"
                     alt="home page dark mode"
                     style="float: right; margin: 0 0 1em 2em; width: 300px; max-width: 40vw; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
                 />
-                This screenshot shows the home page of the app in dark mode. The app is designed to be simple and intuitive to use, with a focus on providing useful information about fossils and geology. You can explore different locations, view fossil records, and learn about the geological history of different areas. The app is still in development, so there may be some bugs and missing features, but I'm working hard to make it as useful and enjoyable as possible.
+                This screenshot shows the home page of the app in dark mode. The app is designed to be simple and intuitive to use, with a focus on providing useful
+                information about fossils and geology. You can explore different locations, view fossil records, and learn about the geological history of different
+                areas. The app is still in development, so there may be some bugs and missing features, but I'm working hard to make it as useful and enjoyable as
+                possible.
             </p>
             <p>
-                In this image you can see the main features of the home page, including the search bar at the top where you can enter a location to explore, and the various sections below that provide information about fossils, geology, and other related topics. You can click on different sections to learn more about specific topics, and there are also links to other pages where you can find more detailed information and resources.
+                In this image you can see the main features of the home page, including the search bar at the top where you can enter a location to explore, and
+                the various sections below that provide information about fossils, geology, and other related topics. You can click on different sections to
+                learn more about specific topics, and there are also links to other pages where you can find more detailed information and resources.
             </p>
         </div>
     </section>
