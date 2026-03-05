@@ -1,5 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import stratDark from '../../assets/stratigraphic-dark.png';
+import stratExplain from '../../assets/stratigraphic-explain-dark.png';
 ---
 
 <Layout title="Stratigraphy Page Help">
@@ -14,10 +17,8 @@ import Layout from '../../layouts/Layout.astro';
                 resources for those interested in learning more about geology and stratigraphic research.
             </p>
             <p>
-                <img
-                    srcset="/.netlify/images?url=/src/assets/stratigraphic-dark.png&w=640 640w, /.netlify/images?url=/src/assets/stratigraphic-dark.png&w=1280 1280w, /.netlify/images?url=/src/assets/stratigraphic-dark.png&w=2048 2048w"
-                    sizes="(max-width: 1024px) 100vw, 1024px"
-                    src="/.netlify/images?url=/src/assets/stratigraphic-dark.png&w=640"
+                <Image
+                    src={stratDark}
                     alt="stratigraphy page dark mode"
                     style="float: right; margin: 0 0 1em 2em; width: 300px; max-width: 40vw; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
                 />
@@ -32,20 +33,18 @@ import Layout from '../../layouts/Layout.astro';
                 geology and stratigraphic research. The stratigraphy page is a great way to explore the rich geological history of our planet and gain a deeper
                 understanding of the ancient environments that once existed on Earth.
             </p>
-            <p class="pt-15">
-                <img
-                    srcset="/.netlify/images?url=/src/assets/stratigraphic-explain-dark.png&w=640 640w, /.netlify/images?url=/src/assets/stratigraphic-explain-dark.png&w=1280 1280w, /.netlify/images?url=/src/assets/stratigraphic-explain-dark.png&w=2048 2048w"
-                    sizes="(max-width: 1024px) 100vw, 1024px"
-                    src="/.netlify/images?url=/src/assets/stratigraphic-explain-dark.png&w=640"
+            <div class="pt-15">
+                <Image
+                    src={stratExplain}
                     alt="stratigraphy detail page dark mode"
                     style="float: left; margin: 1em 2em 0em 0em; width: 300px; max-width: 40vw; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
                 />
-                <p class="pt-8">
+                <div class="pt-8">
                     This screenshot shows the stratigraphy detail page of the app in dark mode. The image shows the more detailed information about a specific
                     stratigraphic units, including its classification, age, and the environment it represents. It aims to aid in the understanding of the
                     stratigraphic units and their geological context. You can explore different stratigraphic units, learn about their age and significance.
-                </p>
-            </p>
+                </div>
+            </div>
         </div>
     </section>
 </Layout>

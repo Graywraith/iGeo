@@ -1,5 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import homeDark from '../../assets/home-dark.png';
 ---
 
 <Layout title="About and Settings">
@@ -20,10 +22,8 @@ import Layout from '../../layouts/Layout.astro';
                 their preferred locations without having to search for them each time.
             </p>
             <p>
-                <img
-                    srcset="/.netlify/images?url=/src/assets/home-dark.png&w=640 640w, /.netlify/images?url=/src/assets/home-dark.png&w=1280 1280w, /.netlify/images?url=/src/assets/home-dark.png&w=2048 2048w"
-                    sizes="(max-width: 1024px) 100vw, 1024px"
-                    src="/.netlify/images?url=/src/assets/home-dark.png&w=640"
+                <Image
+                    src={homeDark}
                     alt="home page dark mode"
                     style="float: right; margin: 0 0 1em 2em; width: 300px; max-width: 40vw; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
                 />

@@ -1,15 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro';
----
-
-<Layout title="Home Page Help">
-    <section class="disclaimer-section">
-        <h2 class="text-teal-400 my-1.5">Disclaimer</h2>
-        <div>
+import { Image } from 'astro:assets';
+import homeDark from '../../assets/home-dark.png';
             <p>
-                This page is aimed at giving you a bit of an idea of how to use the app and how to gain the most from it. It's a work in progress and will be
-                updated as the app develops but I wanted to get something up there to give you an idea of what I'm trying to do with this project and how it can
-                be used to explore the world of fossils and geology.
+                <Image
+                    src={homeDark}
+                    alt="home page dark mode"
+                    style="float: right; margin: 0 0 1em 2em; width: 300px; max-width: 40vw; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);"
+                />
+                This screenshot shows the home page of the app in dark mode. The app is designed to be simple and intuitive to use, with a focus on providing useful information about fossils and geology. You can explore different locations, view fossil records, and learn about the geological history of different areas. The app is still in development, so there may be some bugs and missing features, but I'm working hard to make it as useful and enjoyable as possible.
+            </p>
             </p>
             <p>
                 <img
