@@ -11,8 +11,8 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
-        "npm:@astrojs/netlify@^7.0.3",
-        "npm:@astrojs/react@5",
+        "npm:@astrojs/netlify@^6.4.1",
+        "npm:@astrojs/react@^6.0.2",
         "npm:@fontsource-variable/inter@^5.2.5",
         "npm:@netlify/blobs@^8.2.0",
         "npm:@netlify/functions@^2.8.2",
@@ -21,7 +21,7 @@
         "npm:@types/node@^20.12.7",
         "npm:@types/react-dom@^18.2.25",
         "npm:@types/react@^18.2.79",
-        "npm:astro@^6.0.5",
+        "npm:astro@^7.1.6",
         "npm:blobshape@1",
         "npm:marked-shiki@^1.2.0",
         "npm:marked@13",
@@ -30,7 +30,7 @@
         "npm:prettier@^3.6.2",
         "npm:react-dom@^18.2.0",
         "npm:react@^18.2.0",
-        "npm:sharp@~0.34.3",
+        "npm:sharp@~0.35.3",
         "npm:svix@^1.68.0",
         "npm:tailwindcss@^4.0.14",
         "npm:unique-names-generator@^4.7.1"
