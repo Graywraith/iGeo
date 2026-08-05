@@ -11,15 +11,15 @@
         "astro": "astro"
     },
     "dependencies": {
-        "@astrojs/netlify": "^7.0.8",
-        "@astrojs/react": "^5.0.4",
+        "@astrojs/netlify": "^6.4.1",
+        "@astrojs/react": "^6.0.2",
         "@fontsource-variable/inter": "^5.2.5",
         "@netlify/blobs": "^8.2.0",
         "@netlify/functions": "^2.8.2",
         "@tailwindcss/vite": "^4.0.14",
         "@types/react": "^18.2.79",
         "@types/react-dom": "^18.2.25",
-        "astro": "^6.2.2",
+        "astro": "^7.1.6",
         "blobshape": "^1.0.0",
         "marked": "^13.0.0",
         "marked-shiki": "^1.2.0",
@@ -35,6 +35,6 @@
         "png-to-ico": "^2.1.8",
         "prettier": "^3.6.2",
         "prettier-plugin-tailwindcss": "^0.6.14",
-        "sharp": "^0.34.3"
+        "sharp": "^0.35.3"
     }
 }
